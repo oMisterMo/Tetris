@@ -1,32 +1,45 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright (C) 2019 Mohammed Ibrahim
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package tetris;
 
 import java.awt.Color;
 
 /**
- * 07-Jun-2016, 23:13:09.
+ * The TileType class is used to represent all enumerations of a tile.
  *
- * @author Mo
+ * @version 0.1.0
+ * @author Mohammed Ibrahim
  */
 public enum TileType {
 
-    SnakeHead(Color.GREEN),
-    SnakeBody(Color.BLUE),
-    Food(Color.RED),
+    LBLOCK(Color.GREEN),
+    RBLOCK(Color.BLUE),
+    TBLOCK(Color.RED),
+    SBLOCK(Color.YELLOW),
     EMPTY(null);
-    
-    private Color tile;
-    
+
+    private final Color tile;
+
     /* Constructor is private or protected only */
-    private TileType(Color color){
+    private TileType(Color color) {
         tile = color;
     }
-    
-    public Color getColor(){
+
+    public Color getColor() {
         return tile;
     }
 }

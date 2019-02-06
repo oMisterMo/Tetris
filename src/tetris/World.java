@@ -1,139 +1,160 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright (C) 2019 Mohammed Ibrahim
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package tetris;
 
 import java.awt.Graphics2D;
 import java.util.Random;
 
 /**
- * 16/05/2016
- * 
- * @author Mo
+ * The World class handles the rendering of all Game Objects.
+ *
+ * @version 0.1.0
+ * @author Mohammed Ibrahim
  */
-public class World extends GameObject{
-    
-    public static final int TILE_WIDTH = 50;
-    public static final int TILE_HEIGHT = 50;
-    
+public class World extends GameObject {
+
+    /**
+     * Width of a single tile
+     */
+    public static final int TILE_WIDTH = 25;
+
+    /**
+     * Height of a single tile
+     */
+    public static final int TILE_HEIGHT = 25;
+
+    /**
+     * Number of horizontal tiles
+     */
     public static final int NO_OF_TILES_X = 10;
+
+    /**
+     * Number of vertical tiles
+     */
     public static final int NO_OF_TILES_Y = 20;
-    
-    //Array holding all tiles
-    public TileType[] tiles;
-    
+
+    /**
+     * Array holding all tiles
+     */
+    public TileType[][] tiles;
+
     Random ran = new Random();
-    
-    public World(){
+
+    /**
+     * Constructs a new world.
+     */
+    public World() {
         //Initial new world here
-        tiles = new TileType[NO_OF_TILES_X * NO_OF_TILES_Y];
+        tiles = new TileType[NO_OF_TILES_Y][NO_OF_TILES_X];
         //Initialise each Tile to empty
         resetBoard();
-        
-        //delete randomization of board
-//        for(int i=0; i<tiles.length; i++){
-//            tiles[i] = TileType.values()[ran.nextInt(4)];
-//        }
-        
-//        setTile(1, 0, TileType.SnakeHead);
-//        setTile(1, 0, TileType.SnakeHead);
-//        setTile(0, 0, TileType.Food);
-//        setTile(0, 3, TileType.Food);
-//        setTile(0, 4, TileType.Food);
-//        setTile(0, 5, TileType.Food);
-//        setTile(0, 6, TileType.Food);
-//        setTile(0, 7, TileType.Food);
-//        setTile(1, 7, TileType.Food);
-//        setTile(2, 7, TileType.Food);
-//        setTile(3, 7, TileType.Food);
-//        setTile(4, 7, TileType.Food);
-//        setTile(5, 7, TileType.Food);
-//        setTile(6, 7, TileType.Food);
-//        setTile(7, 7, TileType.Food);
-//        setTile(0, 7, TileType.Food);
-//        setTile(0, 20, TileType.Food);
-//        setTile(0, 21, TileType.Food);
-//        setTile(0, 22, TileType.Food);
-//        setTile(0, 23, TileType.Food);
-//        setTile(0, 24, TileType.Food);
-//        setTile(0, 25, TileType.Food);
-        //setTile(20, 15, TileType.Food);
-//        setTile(3, 18, TileType.Food);
-//        setTile(15, 18, TileType.Food);
-//        setTile(22, 2, TileType.Food);
-//        setTile(30, 30, TileType.Food);
-//        setTile(3, 45, TileType.Food);
-//        setTile(50, 57, TileType.Food);
-//        setTile(0, 1, TileType.SnakeBody);
-//        setTile(1, 1, TileType.SnakeBody);
-//        setTile(59, 59, TileType.SnakeBody);
-//        setTile(49, 49, TileType.SnakeBody);
-//        setTile(59, 0, TileType.SnakeBody);
-//        setTile(0, 59, TileType.SnakeBody);
-        //setBackground(Color.BLACK);
     }
-    
-    
-    public void resetBoard(){
-        for(int i=0; i<tiles.length; i++){
-            tiles[i] = TileType.EMPTY;
+
+    /**
+     * Sets all the tile type to empty.
+     */
+    public void resetBoard() {
+        for (int y = 0; y < NO_OF_TILES_Y; y++) {
+            for (int x = 0; x < NO_OF_TILES_X; x++) {
+                tiles[y][x] = TileType.EMPTY;
+            }
         }
     }
-    
-    public void clearBoard(){
-        for(int i=0; i<tiles.length; i++){
-            tiles[i] = null;
+
+    /**
+     * Sets all tiles to null.
+     */
+    public void clearBoard() {
+        for (int y = 0; y < NO_OF_TILES_Y; y++) {
+            for (int x = 0; x < NO_OF_TILES_X; x++) {
+                tiles[y][x] = null;
+            }
         }
     }
-    
-    public void setTile(int x, int y, TileType tile){
-        if(x< 0 || x>NO_OF_TILES_X){
+
+    /**
+     * Sets a tile at x,y to the given tile.
+     *
+     * @param x the x index of the tile to set
+     * @param y the y index of the tile to set
+     * @param tile tile type to set
+     */
+    public void setTile(int x, int y, TileType tile) {
+        if (x < 0 || x > NO_OF_TILES_X) {
             System.out.println("Error! x val");
             return;
         }
-        if(y< 0 || y>NO_OF_TILES_Y){
+        if (y < 0 || y > NO_OF_TILES_Y) {
             System.out.println("Error! y val");
             return;
         }
-        tiles[y * NO_OF_TILES_X + x] = tile;
+        tiles[y][x] = tile;
     }
-    
-    public TileType getTile(int x, int y){
-        return tiles[y * NO_OF_TILES_X + x];
+
+    /**
+     * Gets a tile at x,y
+     *
+     * @param x the x index of the tile to return
+     * @param y the y index of the tile to return
+     * @return tile at x,y
+     */
+    public TileType getTile(int x, int y) {
+        return tiles[y][x];
     }
 
     @Override
     void gameUpdate() {
+        //do nothing
     }
 
     @Override
     void gameRender(Graphics2D g) {
         /* Called every frame */
-        
-        for(int i=0; i<NO_OF_TILES_X * NO_OF_TILES_Y; i++){
-            int x = i % NO_OF_TILES_X;
-            int y = i / NO_OF_TILES_Y;
-            
-            //if tile is empty, do nothing
-            if(tiles[i].equals(TileType.EMPTY)){
-                continue;
-            }
-            
-            //Depending on whats on the tile, choose appropriate color to render
-            if(tiles[i].equals(TileType.SnakeBody)){
-               g.setColor(TileType.SnakeBody.getColor());
-               g.fillRect(x * TILE_WIDTH , y * TILE_HEIGHT , TILE_WIDTH-1, TILE_HEIGHT-1);
-            }else if(tiles[i].equals(TileType.Food)){
-                g.setColor(TileType.Food.getColor());
-                // + 1 to position, -1 to size
-                g.fillOval(x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH-1, TILE_HEIGHT-1);
-            }else{
-                //Must be snake head -> Checked all other tile types
-                g.setColor(TileType.SnakeHead.getColor());
-                g.fillRect(x * TILE_WIDTH , y * TILE_HEIGHT , TILE_WIDTH-1, TILE_HEIGHT-1);
+        for (int y = 0; y < NO_OF_TILES_Y; y++) {
+            for (int x = 0; x < NO_OF_TILES_X; x++) {
+
+                //if tile is empty -> SKIP CURRENT ITERATION
+                if (tiles[y][x].equals(TileType.EMPTY)) {
+                    continue;
+                }
+
+                //Depending on whats on the tile, choose appropriate color to render
+                if (tiles[y][x].equals(TileType.RBLOCK)) {
+                    g.setColor(TileType.RBLOCK.getColor());
+                    g.fillRect(x * TILE_WIDTH, y * TILE_HEIGHT, 
+                            TILE_WIDTH - 1, TILE_HEIGHT - 1);
+                } else if (tiles[y][x].equals(TileType.TBLOCK)) {
+                    g.setColor(TileType.TBLOCK.getColor());
+                    // + 1 to position, -1 to size
+                    g.fillOval(x * TILE_WIDTH, y * TILE_HEIGHT, 
+                            TILE_WIDTH - 1, TILE_HEIGHT - 1);
+                } else {
+                    //Must be snake head -> Checked all other tile types
+                    g.setColor(TileType.LBLOCK.getColor());
+                    g.fillRect(x * TILE_WIDTH, y * TILE_HEIGHT, 
+                            TILE_WIDTH - 1, TILE_HEIGHT - 1);
+
+                    g.fillRect(x * TILE_WIDTH + TILE_WIDTH, y * TILE_HEIGHT, 
+                            TILE_WIDTH - 1, TILE_HEIGHT - 1);
+                    g.fillRect(x * TILE_WIDTH, y * TILE_HEIGHT - TILE_HEIGHT, 
+                            TILE_WIDTH - 1, TILE_HEIGHT - 1);
+                    g.fillRect(x * TILE_WIDTH, y * TILE_HEIGHT - TILE_HEIGHT * 2, 
+                            TILE_WIDTH - 1, TILE_HEIGHT - 1);
+                }
             }
         }
     }

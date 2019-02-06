@@ -1,190 +1,153 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright (C) 2019 Mohammed Ibrahim
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package tetris;
 
 import java.awt.Graphics2D;
-import java.awt.List;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
 /**
- * 08-Jun-2016, 18:57:32.
+ * This Class represents the game screen, all logic occurs here (08-Jun-2016,
+ * 18:57:32).
  *
- * @author Mo
+ * @version 0.1.0
+ * @author Mohammed Ibrahim
  */
-public class Tetris extends GameObject{
-    
+public class Tetris extends GameObject {
+
     private World world;
-    
+
     //Movement direction
-    public static final int UP = 0;
+    /**
+     * Block is moving DOWN
+     */
     public static final int DOWN = 1;
+
+    /**
+     * Block is moving LEFT
+     */
     public static final int LEFT = 2;
+
+    /**
+     * Block is moving RIGHT
+     */
     public static final int RIGHT = 3;
     private int currentState;
-    
-    //Actual snake size
-    LinkedList<Point> snake;
+
+    //Actual shapeList size
+    LinkedList<Point> shapeList;
     //Current Poition
-    Point head;
-    Point temp;
-    
+    Point curShape;
+    TileType blockType;
+    //Point temp;
+
     private Random ran;
-    
-    public Tetris(World world){
+
+    /**
+     * Constructs a new world
+     *
+     * @param world reference to game world
+     */
+    public Tetris(World world) {
         this.world = world;
-        snake = new LinkedList();
-        
-        head = new Point(0,0);
-        snake.add(head);
-        world.setTile(head.x, head.y, TileType.SnakeHead);
-        currentState = Tetris.RIGHT;
-        temp = new Point(0,0);
-        
+        shapeList = new LinkedList();
+        //add new block to ran x < width, y = -1
+        curShape = new Point(0, 0);
+        shapeList.add(curShape);
+
+        blockType = TileType.SBLOCK;
+        world.setTile(curShape.x, curShape.y, blockType);
+        currentState = Tetris.DOWN;
+
+        //temp = new Point(0,0);
         ran = new Random();
     }
-    
-    //Move when key is pressed
-    public void keyPressed(KeyEvent e){
-        int key = e.getKeyCode();
-        
-        //stop the snake from turning back into itself
-        if(currentState == Tetris.UP && key == KeyEvent.VK_DOWN){
-            return;
-        }
-        if(currentState == Tetris.LEFT && key == KeyEvent.VK_RIGHT){
-            return;
-        }
-        if(currentState == Tetris.RIGHT && key == KeyEvent.VK_LEFT){
-            return;
-        }
-        if(currentState == Tetris.DOWN && key == KeyEvent.VK_UP){
-            return;
-        }
 
+    /**
+     * Sets the blocks direction
+     *
+     * @param e key event
+     */
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
         //Update current state depending on movement
-        if (key == KeyEvent.VK_UP) {
-            currentState = Tetris.UP;
-        }else
         if (key == KeyEvent.VK_LEFT) {
             currentState = Tetris.LEFT;
-        }else
-        if (key == KeyEvent.VK_RIGHT) {
+            //moveLeft();
+        } else if (key == KeyEvent.VK_RIGHT) {
             currentState = Tetris.RIGHT;
-        }else
-        if (key == KeyEvent.VK_DOWN) {
+            //moveRight();
+        } else if (key == KeyEvent.VK_DOWN) {
             currentState = Tetris.DOWN;
+            //speedFall();
         }
     }
-    
+
     @Override
     void gameUpdate() {
         //Handle Movement
-        Point tempHead = snake.getFirst();
-        switch(currentState){
+        Point previous = shapeList.pollFirst();
+
+        //drop curShape
+        //handle rotation
+        //checkfor collision with floor
+        //checkfor collision with other shapes
+        //remove line if full
+        //drop other shapes down
+        switch (currentState) {
             case Tetris.DOWN:
                 //Push to front of the stack
-                snake.push(new Point(tempHead.x, tempHead.y + 1));
+                shapeList.push(new Point(previous.x, previous.y + 1));
                 break;
             case Tetris.LEFT:
-                snake.push(new Point(tempHead.x - 1, tempHead.y));
+                shapeList.push(new Point(previous.x - 1, previous.y));
+                currentState = Tetris.DOWN;
                 break;
             case Tetris.RIGHT:
-                snake.push(new Point(tempHead.x + 1, tempHead.y));
-                break;
-            case Tetris.UP:
-                snake.push(new Point(tempHead.x, tempHead.y - 1));
+                shapeList.push(new Point(previous.x + 1, previous.y));
+                currentState = Tetris.DOWN;
                 break;
         }
-        
-        //Update our head variable with new head position
-        head = snake.getFirst();
+
+        //Update our curShape variable with new curShape position
+        curShape = shapeList.getFirst();
+
         //To the right of screen
-        if (head.x > World.NO_OF_TILES_X -1) {
-            head.x = 0;
+        if (curShape.x > World.NO_OF_TILES_X - 1) {
+            curShape.x = World.NO_OF_TILES_X - 1;
         }
         //To the botom
-        if(head.y > World.NO_OF_TILES_Y -1){
-            head.y = 0;
+        if (curShape.y > World.NO_OF_TILES_Y - 1) {
+            curShape.y = World.NO_OF_TILES_Y - 1;
         }
         //To the left
-        if (head.x < 0) {
-            head.x = World.NO_OF_TILES_X -1;
+        if (curShape.x < 0) {
+            curShape.x = 0;
         }
-        //To the top
-        if(head.y < 0){
-            head.y = World.NO_OF_TILES_Y -1;
-        }
-        
-        //if the current head is not a food
-        if(!isFood(head.x, head.y)){
-            //Remove our old head value
-            //System.out.println("notFood");
-            Point previous = snake.removeLast();
-            world.setTile(previous.x, previous.y, TileType.EMPTY);
-        }else{
-            spawnFood();
-        }
-        
-        //Update the new head
-        world.setTile(head.x, head.y, TileType.SnakeHead);
-        //Add the body that follows head
-        
-        /* Handle food spawn */
-        
+        world.setTile(previous.x, previous.y, TileType.EMPTY);
+        //Update the new curShape
+        world.setTile(curShape.x, curShape.y, blockType);
+        //Add the body that follows curShape
     }
 
     @Override
     void gameRender(Graphics2D g) {
-//        for(Point p: snake){
-//            g.drawRect(p.x, p.y, World.TILE_WIDTH, World.TILE_HEIGHT);
-//        }
-    }
-    
-    private void spawnFood(){        
-        int x = ran.nextInt(World.NO_OF_TILES_X);
-        int y = ran.nextInt(World.NO_OF_TILES_Y);
         
-        //While the current tile is not empty
-        while(!isEmpty(x, y)){
-            /*Later in the game, we could be stuck here a while looking for free slots*/
-            int num =0;
-            System.out.println("CURRENT TILE NOT EMPTY FOUND NEW SPAWN: ");
-            x = ran.nextInt(World.NO_OF_TILES_X);
-            y = ran.nextInt(World.NO_OF_TILES_Y);
-            System.out.println("x: "+x +" y: "+y);
-            System.out.println("Times looked: " + ++num);
-        }
-        
-        setFood(x, y);
     }
-    
-    private void setFood(int x, int y){
-        world.setTile(x, y, TileType.Food);
-    }
-    
-    private void setHead(int x, int y){
-        world.setTile(x, y, TileType.SnakeHead);
-    }
-    
-    private void setBody(int x, int y){
-        world.setTile(x, y, TileType.SnakeBody);
-    }
-    
-    public boolean isBody(int x, int y){
-        return world.getTile(x, y).equals(TileType.SnakeBody);
-    }
-    public boolean isFood(int x, int y){
-        return world.getTile(x, y).equals(TileType.Food);
-    }
-    public boolean isEmpty(int x, int y){
-        return world.getTile(x, y).equals(TileType.EMPTY);
-    }
-
 }
