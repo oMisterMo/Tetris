@@ -26,7 +26,7 @@ import java.awt.Color;
  */
 public enum TileType {
 
-    LBLOCK(Color.GREEN),
+    LBLOCK(Color.ORANGE),
     RBLOCK(Color.BLUE),
     TBLOCK(Color.RED),
     SBLOCK(Color.YELLOW),

@@ -33,7 +33,7 @@ public abstract class GameObject {
     protected int height;
     protected Rectangle hitbox;
 
-    abstract void gameUpdate();
+    abstract void gameUpdate(float deltaTime);
 
     abstract void gameRender(Graphics2D g);
 

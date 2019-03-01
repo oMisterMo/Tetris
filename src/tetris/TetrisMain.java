@@ -19,7 +19,7 @@ package tetris;
 import javax.swing.JFrame;
 
 /**
- * Main Class (13-Jun-2016, 21:13:21).
+ * Main Class.
  *
  * @version 0.1.0
  * @author Mohammed Ibrahim
@@ -32,7 +32,7 @@ public class TetrisMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        JFrame window = new JFrame("First Game");
+        JFrame window = new JFrame("Tetris");
         GamePanel game = new GamePanel();
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

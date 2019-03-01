@@ -117,7 +117,7 @@ public class World extends GameObject {
     }
 
     @Override
-    void gameUpdate() {
+    void gameUpdate(float deltaTime) {
         //do nothing
     }
 

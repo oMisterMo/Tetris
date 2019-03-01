@@ -23,8 +23,7 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 
 /**
- * This Class represents the game screen, all logic occurs here (08-Jun-2016,
- * 18:57:32).
+ * This Class represents the game screen, all logic occurs here.
  *
  * @version 0.1.0
  * @author Mohammed Ibrahim
@@ -100,7 +99,7 @@ public class Tetris extends GameObject {
     }
 
     @Override
-    void gameUpdate() {
+    void gameUpdate(float deltaTime) {
         //Handle Movement
         Point previous = shapeList.pollFirst();
 

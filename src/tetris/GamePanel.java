@@ -26,7 +26,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.*;
 
 /**
- * Game screen which ties together all classes (16/05/2016).
+ * Game screen which ties together all classes.
  *
  * @version 0.1.0
  * @author Mohammed Ibrahim
@@ -88,7 +88,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        long startTime;
+        long startTime = System.nanoTime();
+        float deltaTime;
         long timeTaken;
         long frameCount = 0;
         long totalTime = 0;
@@ -102,8 +103,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         //GAME LOOP
         while (running) {
+            deltaTime = (System.nanoTime() - startTime) / 1000000000.0f;
             startTime = System.nanoTime();
-            gameUpdate();
+//            System.out.println("delta: "+deltaTime);
+            gameUpdate(deltaTime);
             gameRender(g);
             gameDraw();
 
@@ -140,21 +143,21 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    private void gameUpdate() {
-        tetris.gameUpdate();
+    private void gameUpdate(float deltaTime) {
+        tetris.gameUpdate(deltaTime);
     }
 
     private void gameRender(Graphics2D g) {
         //Clear screen
         g.setColor(backgroundColor);
         g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        
+
         //Draw world
         world.gameRender(g);
 
         //Draw text information
-        g.setColor(Color.WHITE);
-        g.drawString("FPS:" + averageFPS, 10, 20);
+//        g.setColor(Color.WHITE);
+//        g.drawString("FPS:" + averageFPS, 10, 20);
     }
 
     private void gameDraw() {
